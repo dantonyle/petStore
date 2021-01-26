@@ -2,7 +2,7 @@ package com.example.demo.store;
 
 import javax.persistence.*;
 
-@Table(name = "my_product")
+@Table(name = "my_pet")
 @Entity
 public class ProductEntity {
 
@@ -10,34 +10,47 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "name")
+	
+	@Column(name = "name")
     private String name;
+	
+	@Column(name = "species")
+	private String species;
+	
+	
+	@Column(name = "price")
+	private Float price;
 
-    @Column(name = "price")
-    private Float price;
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getSpecies() {
+		return species;
+	}
 
-    public Float getPrice() {
-        return price;
-    }
+	public void setSpecies(String species) {
+		this.species = species;
+	}
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
 }

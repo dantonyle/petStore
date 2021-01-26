@@ -6,22 +6,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 @RestController
 public class StoreController {
 
     @Autowired
     ProductEntityCrudRepository productEntityCrudRepository;
 
-    @GetMapping(path = "/contact")
-    String contact() {
-        return "phone: 414.123.1234";
-    }
 
     @GetMapping(path = "/createProduct", produces = "text/html")
     String showProductForm() {
-        String output = "<form action='' method='POST'>";
-        output += "Name: <input name='name' type='text' /><br />";
-        output += "Price: <input name='price' type='text' /><br />";
+    	String output = "<form action='' method='POST'>";
+        output += "<p> Name: <input name='name' type='text' /></p>";
+        output += "<p> Species: <input name='species' type='text' /></p>";
+        output += "<p> Price: <input name='price' type='text' /></p>";
         output += "<input type='submit' />";
         output += "</form>";
         return output;
@@ -29,35 +28,53 @@ public class StoreController {
 
     @PostMapping(path = "/createProduct")
     void createProduct(@ModelAttribute ProductEntity product) {
-        if (product == null || product.getName() == null) {
-            throw new RuntimeException("Name required");
-        }
-        if (product.getPrice() < 0) {
+    	if (product == null || product.getName() == null) {
+            throw new RuntimeException("Please fill all information");
+        } else if (product.getPrice() < 0) {
             throw new RuntimeException("Price cannot be negative");
+        } else if (product.getSpecies() == null) {
+        	throw new RuntimeException("Species needs to be identified");
+        } else {
+        	productEntityCrudRepository.save(product);
+        	System.out.print("New Pet added to PetStore");
         }
-        productEntityCrudRepository.save(product);
     }
 
     @GetMapping(path = "/home")
     String home() {
 
-        ProductEntity bottle = new ProductEntity();
-        bottle.setName("Best OJ ever");
-        bottle.setPrice(33.88F);
-        productEntityCrudRepository.save(bottle);
+    	ProductEntity pet1 = new ProductEntity();
+        pet1.setName("Sabrina");
+        pet1.setSpecies("Black Cat");
+        pet1.setPrice(20.98F);
+        productEntityCrudRepository.save(pet1);
 
-        ProductEntity cookie = new ProductEntity();
-        cookie.setName("Best Cookie ever");
-        cookie.setPrice(43.48F);
-        productEntityCrudRepository.save(cookie);
+        ProductEntity pet2 = new ProductEntity();
+        pet2.setName("Peanut");
+        pet2.setSpecies("Dalmation");
+        pet2.setPrice(30.98F);
+        productEntityCrudRepository.save(pet2);
 
-        Iterable<ProductEntity> products = productEntityCrudRepository.findAll();
+        Iterable<ProductEntity> pets = productEntityCrudRepository.findAll();
 
         String myProducts = "<h2>Our products</h2>";
-        for (ProductEntity p: products) {
-            myProducts = myProducts + "<p>" + p.getName() + " $" + p.getPrice() + "</p>";
+        for (ProductEntity p: pets) {
+            myProducts = myProducts + "Name:" + p.getName() + " | Species:" + p.getSpecies() +  " | Price: $" + p.getPrice() + "</p>";
         }
         return myProducts;
+    }
+    
+    @GetMapping(path = "/showPets", produces = "text/html")
+    String showAllPets() {
+    	
+    
+    	Iterable<ProductEntity> pets = productEntityCrudRepository.findAll();
+    	
+    	String myProducts = "<form action='' method='POST'><h2>Pets Available</h2> <br> <body>";
+        for (ProductEntity p: pets) {
+            myProducts = myProducts += "<p> Name:" + p.getName() + " | Species:" + p.getSpecies() + " | $" + p.getPrice() + "</p>";
+        }
+        return myProducts + "</body></form>";
     }
 
 }
