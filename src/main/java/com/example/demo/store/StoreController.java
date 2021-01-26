@@ -1,5 +1,7 @@
 package com.example.demo.store;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,15 +45,25 @@ public class StoreController {
     @GetMapping(path = "/home")
     String home() {
 
+    	String[] animNames = { "Silva", "Tilly", "Speedy", "Sparkles", "Spot", "Bubbles", "Grover", "Greg" };
+    	String[] animSpecies = { "Gecko", "Tortoise", "Rabbit", "Tarantula", "Dragon", "Unicorn", "Phoenix", "Slime" };
+    
+    	Random rand = new Random();
+    	int numName = rand.nextInt(8);
+    	int numAnim = rand.nextInt(8);
+    	
     	ProductEntity pet1 = new ProductEntity();
-        pet1.setName("Sabrina");
-        pet1.setSpecies("Black Cat");
+        pet1.setName(animNames[numName]);
+        pet1.setSpecies(animSpecies[numAnim]);
         pet1.setPrice(20.98F);
         productEntityCrudRepository.save(pet1);
-
+        
+        numName = rand.nextInt(8);
+    	numAnim = rand.nextInt(8);
+    	
         ProductEntity pet2 = new ProductEntity();
-        pet2.setName("Peanut");
-        pet2.setSpecies("Dalmation");
+        pet2.setName(animNames[numName]);
+        pet2.setSpecies(animSpecies[numAnim]);
         pet2.setPrice(30.98F);
         productEntityCrudRepository.save(pet2);
 
